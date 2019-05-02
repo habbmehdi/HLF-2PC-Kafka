@@ -17,20 +17,18 @@ const ccp = JSON.parse(ccpJSON);
 const axios = require('axios')
 
 axios.post('http://localhost:3000',
-{
-    Tx: 'Tx03'
-  })
-.catch((error) => {
-  console.error(error)
-})
-
-axios.post('http://209.97.140.177:3000',
   'Tx03')
 .catch((error) => {
   console.error(error)
 })
 
-axios.post('http://46.101.113.99:3000',
+axios.post('http://localhost:3001',
+  'Tx03')
+.catch((error) => {
+  console.error(error)
+})
+
+axios.post('http://localhost:3003',
   'Tx03')
 
 .catch((error) => {
@@ -68,7 +66,7 @@ async function main() {
         // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR10', 'Dave')
         currntdate = Date.now();
         console.log("txSubmittedTime ="+ Date.now());
-        await contract.submitTransaction('initiateTx', 'Tx08', '1','2','3');
+        await contract.submitTransaction('initiateTx', 'Tx01', '1','2','3');
         console.log("a + b ="+ (Date.now() - currntdate));
         //need to send tx details to other nodes here 
 

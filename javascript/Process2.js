@@ -39,7 +39,8 @@ while (!Txsubmitted){
     await sleep(5000)
 }
 while (!voteInit){
-    await myProcess(req.body.Tx).catch(function(error) {
+    console.log(voteInit);
+    await myProcess().catch(function(error) {
         console.log(error);
       })
       await sleep(5000)
@@ -77,15 +78,11 @@ async function myProcess() {
 
     var eventHub = channel.getChannelEventHub("peer0.org1.example.com");
 
-    eventHub.connect(true);
-
     var myAddress = '2';
 
     var transactionId = 'Tx01';
 
     var decision = "Commit";
-
-    voteInit = true;
 
     /*setTimeout(function() {
         if (!evtFired) {
@@ -112,7 +109,7 @@ async function myProcess() {
 );
 currntdate = Date.now();
 console.log("txSubmittedTime ="+ Date.now());
-await contract.submitTransaction('voteTx', 'Tx13', '2', 'Commit');
+await contract.submitTransaction('voteTx', 'Tx01', '2', 'Commit');
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
@@ -152,7 +149,7 @@ async function myProcess2() {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryTx','Tx13');
+        const result = await contract.evaluateTransaction('queryTx','Tx1');
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         if (result != null){
@@ -172,4 +169,4 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 })
 
-app.listen(3000)
+app.listen(3001)

@@ -32,13 +32,13 @@ while (!Txsubmitted){
     await myProcess2().catch(function(error) {
         console.log(error);
     })
-    await sleep(5000)
+    await sleep(500)
 }
 while (!voteInit){
-    await myProcess(req.body.Tx).catch(function(error) {
+    await myProcess().catch(function(error) {
         console.log(error);
       })
-      await sleep(5000)
+      await sleep(500)
 }
     next();
 }
@@ -81,14 +81,12 @@ async function myProcess() {
 
     var decision = "Commit";
 
-    voteInit = true;
-
     /*setTimeout(function() {
         if (!evtFired) {
           contract.submitTransaction('verdictTx', transactionId);
         }
     }, 100000);*/
-
+    
     eventHub.registerChaincodeEvent("2-pc","Tx",
     (event, block_num, txnid, status)=>{
     console.log(eventHub.isconnected())
@@ -106,9 +104,10 @@ async function myProcess() {
     console.log('2')
     }
 );
+
 currntdate = Date.now();
 console.log("txSubmittedTime ="+ Date.now());
-await contract.submitTransaction('voteTx', 'Tx13', '3', 'Commit');
+await contract.submitTransaction('voteTx', 'Tx14', '3', 'Commit');
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
@@ -148,7 +147,7 @@ async function myProcess2() {
         // Evaluate the specified transaction.
         // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
         // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
-        const result = await contract.evaluateTransaction('queryTx','Tx13');
+        const result = await contract.evaluateTransaction('queryTx','Tx14');
         console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         if (result != null){
@@ -168,4 +167,4 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 })
 
-app.listen(3000)
+app.listen(3003)
