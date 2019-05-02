@@ -8,7 +8,7 @@ const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
-const ccpPath = path.resolve(__dirname, '..', '..', 'basic-network', 'connection.json');
+const ccpPath = path.resolve(__dirname, '..', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
@@ -36,7 +36,7 @@ var myLogger = async function (req, res, next){
         console.log(error);
       });*/
 while (!voteInit){
-    await myProcess().catch(function(error) {
+    await myProcess(req.body).catch(function(error) {
         console.log(error);
       })
       await sleep(5000)
@@ -44,7 +44,7 @@ while (!voteInit){
     next();
 }
 
-async function myProcess() {
+async function myProcess(txId) {
   console.log('LOGGED')
   try {
 
@@ -79,7 +79,7 @@ async function myProcess() {
 
     var myAddress = '1';
 
-    var transactionId = "Tx33";
+    var transactionId = txId;
 
     var decision = "Commit";
 
@@ -109,7 +109,9 @@ async function myProcess() {
     }
 );
 await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
+currntdate = Date.now();
 console.log("txSubmittedTime ="+ Date.now());
+console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
 

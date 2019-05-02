@@ -11,6 +11,37 @@ const path = require('path');
 const ccpPath = path.resolve(__dirname, '..', '..', 'basic-network', 'connection.json');
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
+const axios = require('axios')
+
+axios.post('http://68.183.71.63:3000',
+  'Tx03')
+.then((res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.log(res)
+})
+.catch((error) => {
+  console.error(error)
+})
+
+axios.post('http://209.97.140.177:3000',
+  'Tx03')
+.then((res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.log(res)
+})
+.catch((error) => {
+  console.error(error)
+})
+
+axios.post('http://46.101.113.99:3000',
+  'Tx03')
+.then((res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+  console.log(res)
+})
+.catch((error) => {
+  console.error(error)
+})
 
 async function main() {
     try {
