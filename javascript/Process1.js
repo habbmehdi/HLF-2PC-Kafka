@@ -108,8 +108,8 @@ async function myProcess(txId) {
     console.log('2')
     }
 );
-await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
 currntdate = Date.now();
+await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
 console.log("txSubmittedTime ="+ Date.now());
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
