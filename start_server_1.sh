@@ -35,22 +35,22 @@ docker exec -e "CORE_PEER_LOCALMSPID=Org1MSP" -e "CORE_PEER_MSPCONFIGPATH=/var/h
 - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
 
 # install chaincode 
-#docker exec -it cli peer chaincode install -n 2pc -p github.com/chaincode/2pc -v v0
+docker exec -it cli peer chaincode install -n 2pc -p github.com/chaincode/2pc -v v0
 
 
 # define connecting peer to peer1 on docker-compose-cli.yaml
-#- CORE_PEER_ADDRESS=peer1.org1.example.com:7051
+CORE_PEER_ADDRESS=peer1.org1.example.com:8051
 
 # install chaincode 
-#docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
+docker exec -it cli peer chaincode install -n 2pc -p github.com/chaincode/2pc -v v0
 
 # define connecting peer to peer2 on docker-compose-cli.yaml
-#- CORE_PEER_ADDRESS=peer2.org1.example.com:7051
+CORE_PEER_ADDRESS=peer2.org1.example.com:0051
 
 # install chaincode 
-#docker exec -it cli peer chaincode install -n mycc -p github.com/chaincode -v v0
+docker exec -it cli peer chaincode install -n 2pc -p github.com/chaincode/2pc -v v0
 
-docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C mychannel -n 2-pc github.com/chaincode/2pc -v v0 -c '{"Args": ["a", "100"]}'
+docker exec -it cli peer chaincode instantiate -o orderer0.example.com:7050 -C mychannel -n 2pc github.com/chaincode/2pc -v v0 -c '{"Args": ["a", "100"]}'
 
 
 
