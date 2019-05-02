@@ -109,8 +109,8 @@ async function myProcess(txId) {
     }
 );
 currntdate = Date.now();
-await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
 console.log("txSubmittedTime ="+ Date.now());
+await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
