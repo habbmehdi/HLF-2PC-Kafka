@@ -4,6 +4,9 @@
 
 'use strict';
 
+var currntdate;
+var transactionId;
+
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
@@ -15,14 +18,6 @@ const ccp = JSON.parse(ccpJSON);
 var express = require('express')
 var app = express()
 
-var t = 5;
-
-function rejectDelay(reason) {
-    return new Promise(function(resolve, reject) {
-        setTimeout(reject.bind(null, reason), t); 
-    });
-}
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -31,12 +26,20 @@ var evtFired = false;
 
 var voteInit = false;
 
+var Txsubmitted = false;
+
 var myLogger = async function (req, res, next){
    /* myProcess().catch(function(error) {
         console.log(error);
       });*/
+while (!Txsubmitted){ 
+    await myProcess2().catch(function(error) {
+        console.log(error);
+    })
+    await sleep(5000)
+}
 while (!voteInit){
-    await myProcess(req.body).catch(function(error) {
+    await myProcess(req.body.Tx).catch(function(error) {
         console.log(error);
       })
       await sleep(5000)
@@ -44,7 +47,7 @@ while (!voteInit){
     next();
 }
 
-async function myProcess(txId) {
+async function myProcess() {
   console.log('LOGGED')
   try {
 
@@ -54,20 +57,19 @@ async function myProcess(txId) {
     console.log(`Wallet path: ${walletPath}`);
 
     // Check to see if we've already enrolled the user.
-    const userExists = await wallet.exists('user1');
+    const userExists = await wallet.exists('user6');
     if (!userExists) {
         console.log('An identity for the user "user1" does not exist in the wallet');
         console.log('Run the registerUser.js application before retrying');
         return;
     }
-
     // Create a new gateway for connecting to our peer node.
     const gateway = new Gateway();
-    await gateway.connect(ccp, { wallet, identity: 'user1', discovery: { enabled: false } });
+    await gateway.connect(ccp, { wallet, identity: 'user6', discovery: { enabled: false } });
     // Get the network (channel) our contract is deployed to.
     const network = await gateway.getNetwork('mychannel');
     // Get the contract from the network.
-    const contract = network.getContract('2pc');
+    const contract = network.getContract('2-pc');
 
     const client = await gateway.getClient();
 
@@ -79,7 +81,7 @@ async function myProcess(txId) {
 
     var myAddress = '1';
 
-    var transactionId = txId;
+    var transactionId = 'Tx01';
 
     var decision = "Commit";
 
@@ -91,7 +93,7 @@ async function myProcess(txId) {
         }
     }, 100000);*/
 
-    eventHub.registerChaincodeEvent("2pc","Tx",
+    eventHub.registerChaincodeEvent("2-pc","Tx",
     (event, block_num, txnid, status)=>{
     console.log(eventHub.isconnected())
     console.log('Successfully got a chaincode event with transid:'+ txnid + ' with status:'+status);
@@ -108,9 +110,9 @@ async function myProcess(txId) {
     console.log('2')
     }
 );
-await contract.submitTransaction('voteTx', transactionId, myAddress, decision);
 currntdate = Date.now();
 console.log("txSubmittedTime ="+ Date.now());
+await contract.submitTransaction('voteTx', 'Tx13', '1', 'Commit');
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
@@ -119,11 +121,55 @@ console.log(eventHub.isconnected())
     console.error(`Failed to evaluate transaction: ${error}`);
 }
 }
+
+async function myProcess2() {
+    console.log('LOGGED')
+    try {
+
+        // Create a new file system based wallet for managing identities.
+        const walletPath = path.join(process.cwd(), 'wallet');
+        const wallet = new FileSystemWallet(walletPath);
+        console.log(`Wallet path: ${walletPath}`);
+
+        // Check to see if we've already enrolled the user.
+        const userExists = await wallet.exists('user6');
+        if (!userExists) {
+            console.log('An identity for the user "user6" does not exist in the wallet');
+            console.log('Run the registerUser.js application before retrying');
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: 'user6', discovery: { enabled: false } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('2-pc');
+        
+        // Evaluate the specified transaction.
+        // queryCar transaction - requires 1 argument, ex: ('queryCar', 'CAR4')
+        // queryAllCars transaction - requires no arguments, ex: ('queryAllCars')
+        const result = await contract.evaluateTransaction('queryTx','Tx13');
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+
+        if (result != null){
+            Txsubmitted = true;
+        }
+
+    } catch (error) {
+        console.error(`Failed to evaluate transaction: ${error}`);
+        process.exit(1);
+    }
+  }
   
 app.use(myLogger)
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  console.log('Txid = '+req.Tx);
+  res.send('Hello World!');
 })
 
 app.listen(3000)

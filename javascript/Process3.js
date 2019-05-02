@@ -1,7 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- */
-
 'use strict';
 
 var currntdate;
@@ -79,7 +75,7 @@ async function myProcess() {
 
     eventHub.connect(true);
 
-    var myAddress = '2';
+    var myAddress = '1';
 
     var transactionId = 'Tx01';
 
@@ -112,7 +108,7 @@ async function myProcess() {
 );
 currntdate = Date.now();
 console.log("txSubmittedTime ="+ Date.now());
-await contract.submitTransaction('voteTx', 'Tx13', '2', 'Commit');
+await contract.submitTransaction('voteTx', 'Tx13', '3', 'Commit');
 console.log("a + b ="+ (Date.now() - currntdate));
 voteInit = true;
 console.log(eventHub.isconnected())
