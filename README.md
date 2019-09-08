@@ -1,3 +1,4 @@
-# hlf cluster with mutiple orderers and kafa
+Hyperledger Fabric network Using Kafka Inspired by https://medium.com/coinmonks/hyperledger-fabric-setup-with-multiple-peers-and-orderers-with-kafka-542023787a6d
 
-Read more infomarions from [here](https://medium.com/coinmonks/hyperledger-fabric-setup-with-multiple-peers-and-orderers-with-kafka-542023787a6d)
+Two-phase commit, or 2PC, is the most commonly used atomic commitment protocol in database systems. This protocol achieves its goal in many cases of system failure involving processes, network nodes, communication, etc., which is why it is so common. However, 2PC still has a major problem: it is a blocking protocol. In certain conditions, 2PC can be stuck on an operation it cannot complete and thus create a downtime which translates to a loss of money and customers for a business. Other non-blocking commit protocols do exist, but there are generally too complicated and too expensive to replace the simplicity of 2 phase-commit. To this day, no version of 2 phase-commit is truly non-blocking.
+This project looks at the implementation of the 2-PC protocol using the blockchain.
